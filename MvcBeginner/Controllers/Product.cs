@@ -6,7 +6,8 @@ namespace MvcBeginner.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+           string mes = "Đây là danh sách các sản phẩm";
+            return View(model:mes);
         }
     }
 }
