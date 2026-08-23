@@ -1,3 +1,6 @@
+using MvcBeginner.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace MvcBeginner
 {
     public class Program
@@ -8,6 +11,7 @@ namespace MvcBeginner
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<AppDataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 
