@@ -1,7 +1,13 @@
-﻿@model string
-<h1> Danh sách sản phẩm</h1>
-@{
-	string name = "phone";
+﻿@using MvcBeginner.Models
+@model List<Products>
+
+	<h1>Danh Sách Sản Phẩm</h1>
+	@foreach(var product in Model)
+{
+	<p>
+		Id: @product.Id |
+	Ten: @product.Name |
+	Gia: @product.Price |
+	Mo ta: @product.Description
+	</p>
 }
-<p>@Model</p>
-<p>@name</p>

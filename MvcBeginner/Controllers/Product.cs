@@ -1,13 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.EntityFrameworkCore;
+using MvcBeginner.Models;
+using System.Threading.Tasks;
 namespace MvcBeginner.Controllers
 {
     public class Product : Controller
     {
-        public IActionResult Index()
+        private readonly AppDataContext _db;
+        public Product(AppDataContext db)
         {
-           string mes = "Đây là danh sách các sản phẩm";
-            return View(model:mes);
+            _db = db;
+        }
+        
+        public async Task<IActionResult> Index()
+        {
+            var products = await _db.Products.ToListAsync();
+
+            return View(model: products);
         }
     }
 }
