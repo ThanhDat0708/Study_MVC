@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MvcBeginner.Models;
 using System.Threading.Tasks;
+using MvcBeginner.Models.ViewModels;
 namespace MvcBeginner.Controllers
 {
     public class ProductController : Controller
@@ -11,16 +12,32 @@ namespace MvcBeginner.Controllers
         {
             _db = db;
         }
-        
+
         public async Task<IActionResult> Index()
         {
             //var products = await _db.Products.ToListAsync();
             var products = await _db.Products
-                .Include(x => x.Category)
-                .Include(x=>x.Supplier)
-                .ToListAsync();
-
-            return View(model: products);
+               .Select(x => new ProductViewModels
+               {
+                   Id = x.Id,
+                   Name = x.Name,
+                   Price = x.Price,
+                   Stock = x.Stock,
+                   CategoryName = x.Category.Name,
+                     SupplierName = x.Supplier.Name
+               })
+            .ToListAsync();
+            return View(products);
+        }
+        [HttpPost]
+        public IActionResult Create(string name)
+        {
+            return Content($"ten san pham {name}");
+        }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
         }
     }
 }

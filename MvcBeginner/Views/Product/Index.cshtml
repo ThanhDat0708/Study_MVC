@@ -1,5 +1,5 @@
-﻿@using MvcBeginner.Models
-@model List<Product>
+﻿@using MvcBeginner.Models.ViewModels
+@model List<ProductViewModels>
 
 	<h1>Danh Sách Sản Phẩm</h1>
 	@foreach(var product in Model)
@@ -9,7 +9,7 @@
 	Ten: @product.Name |
 	Gia: @product.Price |
 	kho du tru: @product.Stock|
-	hang muc: @product.Category.Name|
-	nguoi cung cap: @product.Supplier.Name
+	hang muc: @product.CategoryName|
+	nguoi cung cap: @product.SupplierName
 	</p>
 }
