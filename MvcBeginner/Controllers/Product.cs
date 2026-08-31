@@ -30,10 +30,20 @@ namespace MvcBeginner.Controllers
             return View(products);
         }
         [HttpPost]
-        public IActionResult Create(string name)
+        public async Task<IActionResult> Create(ProductCreateViewModel model)
         {
-            return Content($"ten san pham {name}");
+            var products = new Product
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Price = model.Price,
+                Stock = model.Stock
+            };
+            _db.Products.Add(products);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
+           
         [HttpGet]
         public IActionResult Create()
         {
