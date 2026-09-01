@@ -37,7 +37,9 @@ namespace MvcBeginner.Controllers
                 Id = model.Id,
                 Name = model.Name,
                 Price = model.Price,
-                Stock = model.Stock
+                Stock = model.Stock,
+                 CategoryId = model.CategoryId,
+                 SupplierId = model.SupplierId
             };
             _db.Products.Add(products);
             await _db.SaveChangesAsync();
@@ -45,8 +47,10 @@ namespace MvcBeginner.Controllers
         }
            
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewBag.Categories =await _db.Categories.ToListAsync();
+            ViewBag.Suppliers =await _db.Suppliers.ToListAsync();
             return View();
         }
     }
