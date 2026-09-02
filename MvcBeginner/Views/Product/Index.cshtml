@@ -2,6 +2,7 @@
 @model List<ProductViewModels>
 
 	<h1>Danh Sách Sản Phẩm</h1>
+<a href="/Product/Create">Them</a>
 	@foreach(var product in Model)
 {
 	<p>
@@ -12,4 +13,7 @@
 	hang muc: @product.CategoryName|
 	nguoi cung cap: @product.SupplierName
 	</p>
+	<a href="/Product/Edit/@product.Id">Sua</a>
+	<a href="/Product/Delete/@product.Id">Xoa</a>
 }
+
