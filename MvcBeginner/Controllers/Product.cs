@@ -41,7 +41,14 @@ namespace MvcBeginner.Controllers
                 CategoryId = model.CategoryId,
                 SupplierId = model.SupplierId
             };
+            if(!ModelState.IsValid)
+            {
+                ViewBag.Categories = await _db.Categories.ToListAsync();
+                ViewBag.Suppliers = await _db.Suppliers.ToListAsync();
+                return View(model);
+            }
             _db.Products.Add(products);
+            TempData["Success"] = "Thêm sản phẩm thành công";
             await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
@@ -56,6 +63,7 @@ namespace MvcBeginner.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int Id)
         {
+            
             var product = await _db.Products.FindAsync(Id);
             if (product == null)
             {
@@ -77,6 +85,12 @@ namespace MvcBeginner.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(ProductEditViewModels model)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Categories = await _db.Categories.ToListAsync();
+                ViewBag.Suppliers = await _db.Suppliers.ToListAsync();
+                return View(model);
+            }
             var product = await _db.Products.FindAsync(model.Id);
             if (product == null)
             {

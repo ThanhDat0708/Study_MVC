@@ -1,6 +1,9 @@
 ﻿@using MvcBeginner.Models.ViewModels
 @model List<ProductViewModels>
-
+@if(TempData["Success"] != null)
+{
+	<p>@TempData["Success"]</p>
+}
 	<h1>Danh Sách Sản Phẩm</h1>
 <a href="/Product/Create">Them</a>
 	@foreach(var product in Model)
