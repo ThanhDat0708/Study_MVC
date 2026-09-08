@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MvcBeginner.Models;
 using System.Threading.Tasks;
 using MvcBeginner.Models.ViewModels;
+using System.Runtime.InteropServices;
 namespace MvcBeginner.Controllers
 {
     public class ProductController : Controller
@@ -36,13 +37,20 @@ namespace MvcBeginner.Controllers
             {
                 Id = model.Id,
                 Name = model.Name,
-                Price = model.Price,
-                Stock = model.Stock,
-                CategoryId = model.CategoryId,
-                SupplierId = model.SupplierId
+                Price = model.Price ?? 0,
+                Stock = model.Stock ?? 0,
+                CategoryId = model.CategoryId ?? 0,
+                SupplierId = model.SupplierId ?? 0
             };
             if(!ModelState.IsValid)
             {
+                ViewBag.Categories = await _db.Categories.ToListAsync();
+                ViewBag.Suppliers = await _db.Suppliers.ToListAsync();
+                return View(model);
+            }
+            if(await _db.Products.AnyAsync(x=> x.Name == model.Name))
+            {
+                ModelState.AddModelError("Name", "Tên sản phẩm đã tồn tại");
                 ViewBag.Categories = await _db.Categories.ToListAsync();
                 ViewBag.Suppliers = await _db.Suppliers.ToListAsync();
                 return View(model);
@@ -78,6 +86,7 @@ namespace MvcBeginner.Controllers
                 CategoryId = product.CategoryId,
                 SupplierId = product.SupplierId
             };
+             
             ViewBag.Categories = await _db.Categories.ToListAsync();
             ViewBag.Suppliers = await _db.Suppliers.ToListAsync();
             return View(model);
@@ -91,16 +100,24 @@ namespace MvcBeginner.Controllers
                 ViewBag.Suppliers = await _db.Suppliers.ToListAsync();
                 return View(model);
             }
+           if (await _db.Products.AnyAsync(x=>x.Name == model.Name && x.Id != model.Id))
+            {
+                ModelState.AddModelError("Name", "Tên sản phẩm đã tồn tại");
+                ViewBag.Categories = await _db.Categories.ToListAsync();
+                ViewBag.Suppliers = await _db.Suppliers.ToListAsync();
+                return View(model);
+
+            }
             var product = await _db.Products.FindAsync(model.Id);
             if (product == null)
             {
                 return NotFound();
             }
             product.Name = model.Name;
-            product.Price = model.Price;
-            product.Stock = model.Stock;
-            product.CategoryId = model.CategoryId;
-            product.SupplierId = model.SupplierId;
+            product.Price = model.Price ?? 0;
+            product.Stock = model.Stock ?? 0;
+            product.CategoryId = model.CategoryId ?? 0;
+            product.SupplierId = model.SupplierId ?? 0;
             await _db.SaveChangesAsync();
             return RedirectToAction("Index");
 
