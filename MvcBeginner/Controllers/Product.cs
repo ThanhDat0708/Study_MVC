@@ -4,30 +4,35 @@ using MvcBeginner.Models;
 using System.Threading.Tasks;
 using MvcBeginner.Models.ViewModels;
 using System.Runtime.InteropServices;
+using MvcBeginner.Services;
 namespace MvcBeginner.Controllers
 {
     public class ProductController : Controller
     {
         private readonly AppDataContext _db;
-        public ProductController(AppDataContext db)
+        public readonly ProductService _productService;
+        public ProductController(AppDataContext db, ProductService productService)
         {
             _db = db;
+            _productService = productService;
         }
 
         public async Task<IActionResult> Index()
         {
-            //var products = await _db.Products.ToListAsync();
-            var products = await _db.Products
-               .Select(x => new ProductViewModels
-               {
-                   Id = x.Id,
-                   Name = x.Name,
-                   Price = x.Price,
-                   Stock = x.Stock,
-                   CategoryName = x.Category.Name,
-                   SupplierName = x.Supplier.Name
-               })
-            .ToListAsync();
+            ////var products = await _db.Products.ToListAsync();
+            //var products = await _db.Products
+            //   .Select(x => new ProductViewModels
+            //   {
+            //       Id = x.Id,
+            //       Name = x.Name,
+            //       Price = x.Price,
+            //       Stock = x.Stock,
+            //       CategoryName = x.Category.Name,
+            //       SupplierName = x.Supplier.Name
+            //   })
+            //.ToListAsync();
+            //return View(products);
+            var products = await _productService.GetAllAsync();
             return View(products);
         }
         [HttpPost]
