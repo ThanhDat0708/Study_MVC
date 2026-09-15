@@ -38,15 +38,6 @@ namespace MvcBeginner.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ProductCreateViewModel model)
         {
-            var products = new Product
-            {
-                Id = model.Id,
-                Name = model.Name,
-                Price = model.Price ?? 0,
-                Stock = model.Stock ?? 0,
-                CategoryId = model.CategoryId ?? 0,
-                SupplierId = model.SupplierId ?? 0
-            };
             if(!ModelState.IsValid)
             {
                 ViewBag.Categories = await _db.Categories.ToListAsync();
@@ -60,9 +51,18 @@ namespace MvcBeginner.Controllers
                 ViewBag.Suppliers = await _db.Suppliers.ToListAsync();
                 return View(model);
             }
-            _db.Products.Add(products);
+          
+            var products = new Product
+            {
+                Name = model.Name,
+                Price = model.Price!.Value,
+                Stock = model.Stock!.Value,
+                CategoryId = model.CategoryId!.Value,
+                SupplierId = model.SupplierId!.Value
+            };
+            await _productService.CreateAsync(products);
             TempData["Success"] = "Thêm sản phẩm thành công";
-            await _db.SaveChangesAsync();
+          
             return RedirectToAction("Index");
         }
 
