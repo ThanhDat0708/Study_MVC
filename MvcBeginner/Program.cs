@@ -14,6 +14,7 @@ namespace MvcBeginner
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<AppDataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<ProductService>();
+            builder.Services.AddScoped<CategorieService>();
 
             var app = builder.Build();
 

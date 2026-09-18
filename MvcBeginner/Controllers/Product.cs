@@ -9,11 +9,11 @@ namespace MvcBeginner.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly AppDataContext _db;
+        //private readonly AppDataContext _db;
         public readonly ProductService _productService;
         public ProductController(AppDataContext db, ProductService productService)
         {
-            _db = db;
+            //_db = db;
             _productService = productService;
         }
 
@@ -40,8 +40,8 @@ namespace MvcBeginner.Controllers
         {
             if(!ModelState.IsValid)
             {
-                ViewBag.Categories = await _db.Categories.ToListAsync();
-                ViewBag.Suppliers = await _db.Suppliers.ToListAsync();
+                ViewBag.Categories = await _productService.GetCategoriesAsync();
+                ViewBag.Suppliers = await _productService.GetSuppliersAsync();
                 return View(model);
             }
             if(await _productService.IsNameCreateAsync(model.Name))
@@ -105,8 +105,8 @@ namespace MvcBeginner.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Categories = await _db.Categories.ToListAsync();
-                ViewBag.Suppliers = await _db.Suppliers.ToListAsync();
+                ViewBag.Categories = await _productService.GetCategoriesAsync();
+                ViewBag.Suppliers = await _productService.GetSuppliersAsync();
                 return View(model);
             }
            if (await _productService.IsNameExistsAsync(model.Name, model.Id))
@@ -140,7 +140,7 @@ namespace MvcBeginner.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var product = await _db.Products.FindAsync(id);
+            var product = await _productService.GetByIdAsync(id);
             if(product == null)
             {
                 return NotFound();
